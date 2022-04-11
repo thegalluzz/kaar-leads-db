@@ -1,0 +1,27 @@
+name: Webhook deployment
+
+on:
+  #  push:
+  #    branches: [main]
+  #  pull_request:
+  #    branches: [main]
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Prevent docker-compose-prod.yml change
+        uses: xalvarez/prevent-file-change-action@v1
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          pattern: docker-compose-prod.yml
+          trustedAuthors: riccardotornesello
+
+      - name: Invoke deployment hook
+        uses: distributhor/workflow-webhook@v2
+        env:
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
