@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import ContactForm, Lead
+from .models import ContactForm, LeadAds
 
 class ContactFormSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,7 +8,7 @@ class ContactFormSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class LeadSerializer(serializers.ModelSerializer):
+class LeadAdsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Lead
+        model = LeadAds
         fields = '__all__'

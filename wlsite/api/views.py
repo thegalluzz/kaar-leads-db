@@ -11,8 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django.conf import settings
 
-from .serializers import ContactFormSerializer, LeadSerializer
-from .models import ContactForm, Lead
+from .serializers import ContactFormSerializer, LeadAdsSerializer
+from .models import ContactForm, LeadAds, LeadWebsite
 import json
 
 class ContactFormAPI(APIView):
@@ -52,17 +52,17 @@ class ContactFormAPI(APIView):
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-class LeadAPI(APIView):
+class LeadAdsAPI(APIView):
     """
     List all Leads, or create a new Lead.
     """
     def get(self, request, format=None):
-        lead = Lead.objects.all()
-        serializer = LeadSerializer(lead, many=True)
+        lead_ads = LeadAds.objects.all()
+        serializer = LeadAdsSerializer(lead_ads, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = LeadSerializer(data=request.data)
+        serializer = LeadAdsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -70,7 +70,7 @@ class LeadAPI(APIView):
 
 
 @csrf_exempt
-def Webhook(request):
+def WebhookAds(request):
     if request.method == 'POST':
         #print("Data received from Webhook is: ", request.body)
 
@@ -81,12 +81,33 @@ def Webhook(request):
         print(test)
         changes = test['entry'][0]['changes']
         print(changes)
-        ad_id = test['entry'][0]['changes'][0]['value']['created_time']
-        print(ad_id)
+
+        ad_id = test['entry'][0]['changes'][0]['value']['ad_id']
+        form_id = test['entry'][0]['changes'][0]['value']['form_id']
+        leadgen_id = test['entry'][0]['changes'][0]['value']['leadgen_id']
+        created_time = test['entry'][0]['changes'][0]['value']['created_time']
+        page_id = test['entry'][0]['changes'][0]['value']['created_time']
+        adgroup_id = test['entry'][0]['changes'][0]['value']['created_time']
+
+        LeadAds.objects.create(
+            lead_id = leadgen_id,
+            created_time = created_time,
+            ad_id = ad_id,
+            ad_name = 'ad_name',
+            adset_id = 'adset_id',
+            adset_name = 'adset_name',
+            campaign_id = 'campaign_id',
+            campaign_name = 'campaign_name',
+            form_id = form_id,
+            full_name = 'full_name',
+            phone_number = 'phone_number',
+            email = 'email',
+            car_request = 'adgroup_name'
+            )
 
         #for element in test['entry']:
             #Lead.objects.create(name="test", get_from_facebook=element['id'])
-
+        
     return HttpResponse(request.GET.get("hub.challenge"))
 
 '''

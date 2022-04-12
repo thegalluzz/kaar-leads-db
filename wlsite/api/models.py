@@ -18,9 +18,10 @@ class ContactForm(models.Model):
     class Meta:
         verbose_name_plural = "Contact Forms"
 
-class Lead(models.Model):
+class LeadAds(models.Model):
     lead_id = models.CharField(max_length=250)
-    created_time = models.DateField(max_length=250)
+    # created_time = models.DateField(max_length=250)
+    created_time = models.CharField(max_length=250)
     ad_id = models.CharField(max_length=250)
     ad_name = models.CharField(max_length=250)
     adset_id = models.CharField(max_length=250)
@@ -38,5 +39,30 @@ class Lead(models.Model):
 
 
     def __str__(self):
-        return 'Lead ' + self.full_name + ' ' + str(self.created_time)
+        return 'Lead Ad' + self.full_name + ' ' + str(self.email)
 
+class LeadWebsite(models.Model):
+    created_time = models.DateField(auto_now_add=True)
+    full_name = models.CharField(max_length=250, null=False, blank=False)
+    phone_number = models.CharField(max_length=25, null=False, blank=False)
+    email = models.EmailField(max_length=250)
+    car_request = models.CharField(max_length=250)
+    agent_id = models.CharField(max_length=250)
+    category = models.CharField(max_length=250, choices=CATEGORY, default='nuovo_lead') 
+    status = models.CharField(max_length=250, choices=STATUS, default='da_richiamare')
+
+    def __str__(self):
+        return 'Lead Website' + self.full_name + ' ' + str(self.created_time)
+
+class LeadMSN(models.Model):
+    created_time = models.DateField(auto_now_add=True)
+    full_name = models.CharField(max_length=250, null=False, blank=False)
+    phone_number = models.CharField(max_length=25, null=False, blank=False)
+    email = models.EmailField(max_length=250)
+    car_request = models.CharField(max_length=250)
+    agent_id = models.CharField(max_length=250)
+    category = models.CharField(max_length=250, choices=CATEGORY, default='nuovo_lead') 
+    status = models.CharField(max_length=250, choices=STATUS, default='da_richiamare')
+
+    def __str__(self):
+        return 'Lead Website' + self.full_name + ' ' + str(self.created_time)
