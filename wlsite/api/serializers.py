@@ -7,7 +7,6 @@ class ContactFormSerializer(serializers.ModelSerializer):
         model = ContactForm
         fields = '__all__'
 
-
 class LeadAdsSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeadAds
