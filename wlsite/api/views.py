@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 from .serializers import ContactFormSerializer, LeadAdsSerializer
-from .models import ContactForm, LeadAds, LeadAdsBackup, LeadWebsite
+from .models import ContactForm, LeadAds, LeadBackup, LeadWebsite, LeadMSN
 import json
 
 class ContactFormAPI(APIView):
@@ -75,30 +75,69 @@ def WebhookAds(request):
         payload = request.body.decode('utf-8')
         payload = json.loads(payload)
 
-        LeadAdsBackup.objects.create(leadads_backup = payload)
-
-        ad_id = payload['entry'][0]['changes'][0]['value']['ad_id']
-        form_id = payload['entry'][0]['changes'][0]['value']['form_id']
-        leadgen_id = payload['entry'][0]['changes'][0]['value']['leadgen_id']
-        created_time = payload['entry'][0]['changes'][0]['value']['created_time']
-        page_id = payload['entry'][0]['changes'][0]['value']['created_time']
-        adgroup_id = payload['entry'][0]['changes'][0]['value']['created_time']
+        LeadBackup.objects.create(
+            leadbackup_date = datetime.now(),
+            leadbackup_backup = payload,
+            )
 
         LeadAds.objects.create(
-            lead_id = leadgen_id,
-            created_time = created_time,
-            ad_id = ad_id,
+            lead_id = payload['entry'][0]['changes'][0]['value']['leadgen_id'],
+            created_time = payload['entry'][0]['changes'][0]['value']['created_time'],
+            ad_id = payload['entry'][0]['changes'][0]['value']['ad_id'],
             ad_name = 'ad_name',
             adset_id = 'adset_id',
             adset_name = 'adset_name',
             campaign_id = 'campaign_id',
             campaign_name = 'campaign_name',
-            form_id = form_id,
+            form_id = payload['entry'][0]['changes'][0]['value']['form_id'],
             full_name = 'full_name',
             phone_number = 'phone_number',
             email = 'email',
-            car_request = 'adgroup_name'
-            )        
+            car_request = 'adgroup_name',
+            )
+
+    return HttpResponse(request.GET.get("hub.challenge"))
+
+@csrf_exempt
+def WebhookWebsite(request):
+    if request.method == 'POST':
+        payload = request.body.decode('utf-8')
+        payload = json.loads(payload)
+
+        LeadBackup.objects.create(
+            leadbackup_date = datetime.now(),
+            leadbackup_backup = payload,
+            )
+
+        LeadWebsite.objects.create(
+            created_time = datetime.datetime.now(),
+            full_name = 'Full Name',
+            phone_number = 'Phone Number',
+            email = 'email',
+            car_request = 'car request',
+            )
+
+    return HttpResponse(request.GET.get("hub.challenge"))
+
+@csrf_exempt
+def WebhookMSN(request):
+    if request.method == 'POST':
+        payload = request.body.decode('utf-8')
+        payload = json.loads(payload)
+
+        LeadBackup.objects.create(
+            leadbackup_date = datetime.now(),
+            leadbackup_backup = payload,
+            )
+
+        LeadMSN.objects.create(
+            created_time = datetime.datetime.now(),
+            full_name = 'full_name',
+            phone_number = 'phone_number',
+            email = 'email',
+            car_request = 'car_request', 
+            )
+
     return HttpResponse(request.GET.get("hub.challenge"))
 
 '''

@@ -39,10 +39,11 @@ class LeadAds(models.Model):
 
 
     def __str__(self):
-        return 'Lead Ad' + self.full_name + ' ' + str(self.email)
+        return 'Lead Ad' + self.full_name + ' ' + str(self.created_time)
 
 class LeadWebsite(models.Model):
-    created_time = models.DateField(auto_now_add=True)
+    #created_time = models.DateTimeField(auto_now_add=True)
+    created_time = models.CharField(max_length=250)
     full_name = models.CharField(max_length=250, null=False, blank=False)
     phone_number = models.CharField(max_length=25, null=False, blank=False)
     email = models.EmailField(max_length=250)
@@ -55,7 +56,8 @@ class LeadWebsite(models.Model):
         return 'Lead Website' + self.full_name + ' ' + str(self.created_time)
 
 class LeadMSN(models.Model):
-    created_time = models.DateField(auto_now_add=True)
+    #created_time = models.DateTimeField(auto_now_add=True)
+    created_time = models.CharField(max_length=250)
     full_name = models.CharField(max_length=250, null=False, blank=False)
     phone_number = models.CharField(max_length=25, null=False, blank=False)
     email = models.EmailField(max_length=250)
@@ -65,8 +67,12 @@ class LeadMSN(models.Model):
     status = models.CharField(max_length=250, choices=STATUS, default='da_richiamare')
 
     def __str__(self):
-        return 'Lead Website' + self.full_name + ' ' + str(self.created_time)
+        return 'Lead Messenger' + self.full_name + ' ' + str(self.created_time)
 
 
 class LeadBackup(models.Model):
-    leadads_backup = models.TextField(max_length=2000)
+    leadbackup_date = models.DateTimeField(auto_now_add=True)
+    leadbackup_backup = models.TextField(max_length=2000)
+
+    def __str__(self):
+        return 'Lead Back Up' + ' ' + str(self.id) + ' ' + str(self.leadbackup_date)
