@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 from .serializers import ContactFormSerializer, LeadAdsSerializer
-from .models import ContactForm, LeadAds, LeadWebsite
+from .models import ContactForm, LeadAds, LeadAdsBackup, LeadWebsite
 import json
 
 class ContactFormAPI(APIView):
@@ -72,22 +72,17 @@ class LeadAdsAPI(APIView):
 @csrf_exempt
 def WebhookAds(request):
     if request.method == 'POST':
-        #print("Data received from Webhook is: ", request.body)
+        payload = request.body.decode('utf-8')
+        payload = json.loads(payload)
 
+        LeadAdsBackup.objects.create(leadads_backup = payload)
 
-        test = request.body.decode('utf-8')
-        test = json.loads(test)
-
-        print(test)
-        changes = test['entry'][0]['changes']
-        print(changes)
-
-        ad_id = test['entry'][0]['changes'][0]['value']['ad_id']
-        form_id = test['entry'][0]['changes'][0]['value']['form_id']
-        leadgen_id = test['entry'][0]['changes'][0]['value']['leadgen_id']
-        created_time = test['entry'][0]['changes'][0]['value']['created_time']
-        page_id = test['entry'][0]['changes'][0]['value']['created_time']
-        adgroup_id = test['entry'][0]['changes'][0]['value']['created_time']
+        ad_id = payload['entry'][0]['changes'][0]['value']['ad_id']
+        form_id = payload['entry'][0]['changes'][0]['value']['form_id']
+        leadgen_id = payload['entry'][0]['changes'][0]['value']['leadgen_id']
+        created_time = payload['entry'][0]['changes'][0]['value']['created_time']
+        page_id = payload['entry'][0]['changes'][0]['value']['created_time']
+        adgroup_id = payload['entry'][0]['changes'][0]['value']['created_time']
 
         LeadAds.objects.create(
             lead_id = leadgen_id,
@@ -103,11 +98,7 @@ def WebhookAds(request):
             phone_number = 'phone_number',
             email = 'email',
             car_request = 'adgroup_name'
-            )
-
-        #for element in test['entry']:
-            #Lead.objects.create(name="test", get_from_facebook=element['id'])
-        
+            )        
     return HttpResponse(request.GET.get("hub.challenge"))
 
 '''
@@ -116,10 +107,10 @@ def Webhook(request):
     if request.method == 'POST':
         # print("Data received from Webhook is: ", request.body)
 
-        test = request.body.decode('utf-8')
-        test = json.loads(test)
+        payload = request.body.decode('utf-8')
+        payload = json.loads(payload)
 
-        for element in test['entry']:
-            Test.objects.create(name="test", get_from_facebook=element['id'])
+        for element in payload['entry']:
+            payload.objects.create(name="payload", get_from_facebook=element['id'])
         return HttpResponse(request.GET.get("hub.challenge"))
 '''

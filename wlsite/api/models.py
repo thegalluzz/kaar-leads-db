@@ -66,3 +66,7 @@ class LeadMSN(models.Model):
 
     def __str__(self):
         return 'Lead Website' + self.full_name + ' ' + str(self.created_time)
+
+
+class LeadBackup(models.Model):
+    leadads_backup = models.TextField(max_length=2000)
