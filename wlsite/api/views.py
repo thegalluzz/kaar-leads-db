@@ -139,6 +139,7 @@ def WebhookMSN(request):
             )
 
     return HttpResponse(request.GET.get("hub.challenge"))
+    
 
 '''
 @csrf_exempt
