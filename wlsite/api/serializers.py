@@ -10,4 +10,5 @@ class ContactFormSerializer(serializers.ModelSerializer):
 class LeadAdsSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeadAds
-        fields = '__all__'
+        #fields = '__all__'
+        exclude = ['agent_id']
