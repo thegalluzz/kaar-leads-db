@@ -60,6 +60,7 @@ class ContactFormAPI(APIView):
 
 #List all Leads, or create a new Lead.
 class LeadAdsAPI(APIView):
+
     def get(self, request, format=None):
         lead_ads = LeadAds.objects.all()
         serializer = LeadAdsSerializer(lead_ads, many=True)
@@ -67,6 +68,8 @@ class LeadAdsAPI(APIView):
 
     def post(self, request, format=None):
         serializer = LeadAdsSerializer(data=request.data)
+        header = request.headers.get("Token", "")
+        print(header)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

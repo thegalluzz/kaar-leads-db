@@ -34,13 +34,13 @@ class LeadAds(models.Model):
     phone_number = models.CharField(max_length=25, null=False, blank=False)
     email = models.EmailField(max_length=250)
     car_request = models.CharField(max_length=250)
-    agent_id = models.CharField(max_length=250, null=True, blank=True)
+    agent_id = models.CharField(max_length=250, blank=True)
     category = models.CharField(max_length=250, choices=CATEGORY, default='nuovo_lead') 
     status = models.CharField(max_length=250, choices=STATUS, default='da_richiamare')
 
 
     def __str__(self):
-        return 'Lead Ad' + self.full_name + ' ' + str(self.created_time)
+        return 'Lead Ad: ' + self.lead_id + ' -- ' + self.full_name + ' ' + str(self.created_time)
     
     class Meta:
         verbose_name_plural = "Lead Ads"
