@@ -177,7 +177,6 @@ REST_FRAMEWORK = {
     ]
 }
 
-
 EMAIL_ADMIN = os.environ.get('EMAIL_ADMIN')
 
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_HOST','').split(',')

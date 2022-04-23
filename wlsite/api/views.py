@@ -1,7 +1,10 @@
+from lib2to3.pgen2 import token
+from urllib.request import HTTPPasswordMgrWithDefaultRealm
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, response
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,11 +12,14 @@ from datetime import datetime
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 
+from rest_framework.authtoken.models import Token
+
 from django.conf import settings
 
 from .serializers import ContactFormSerializer, LeadAdsSerializer
-from .models import ContactForm, LeadAds, LeadBackup, LeadWebsite, LeadMSN, LogLead
+from .models import LeadAds, LeadBackup, LeadWebsite, LeadMSN, LogLead
 import json
+
 
 #Homepage
 def Home(request):
@@ -59,7 +65,10 @@ class ContactFormAPI(APIView):
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 #List all Leads, or create a new Lead.
+
 class LeadAdsAPI(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         lead_ads = LeadAds.objects.all()
@@ -68,8 +77,6 @@ class LeadAdsAPI(APIView):
 
     def post(self, request, format=None):
         serializer = LeadAdsSerializer(data=request.data)
-        header = request.headers.get("Token", "")
-        print(header)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -121,7 +128,6 @@ def WebhookAds(request):
                 exeption_origin = "second try except of WebhookAds",
                 log_exeption = str(repr(e)),
                 )
-        
         return HttpResponse(request.GET.get("hub.challenge"))
     else:
         return Response(status.HTTP_400_BAD_REQUEST)

@@ -34,7 +34,7 @@ class LeadAds(models.Model):
     phone_number = models.CharField(max_length=25, null=False, blank=False)
     email = models.EmailField(max_length=250)
     car_request = models.CharField(max_length=250)
-    agent_id = models.CharField(max_length=250, blank=True)
+    agent_id = models.CharField(max_length=250)
     category = models.CharField(max_length=250, choices=CATEGORY, default='nuovo_lead') 
     status = models.CharField(max_length=250, choices=STATUS, default='da_richiamare')
 
