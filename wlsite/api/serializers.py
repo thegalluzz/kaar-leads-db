@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from .models import ContactForm, LeadAds
 
 class ContactFormSerializer(serializers.ModelSerializer):
@@ -11,4 +10,3 @@ class LeadAdsSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeadAds
         fields = '__all__'
-        #exclude = ['agent_id']

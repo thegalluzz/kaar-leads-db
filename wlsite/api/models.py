@@ -1,4 +1,3 @@
-from cmath import log
 from django.db import models
 from .constants import CATEGORY, STATUS
 
@@ -21,7 +20,6 @@ class ContactForm(models.Model):
 
 class LeadAds(models.Model):
     lead_id = models.CharField(max_length=250)
-    # created_time = models.DateField(max_length=250)
     created_time = models.CharField(max_length=250)
     ad_id = models.CharField(max_length=250)
     ad_name = models.CharField(max_length=250)
@@ -46,7 +44,6 @@ class LeadAds(models.Model):
         verbose_name_plural = "Lead Ads"
 
 class LeadWebsite(models.Model):
-    #created_time = models.DateTimeField(auto_now_add=True)
     created_time = models.CharField(max_length=250)
     full_name = models.CharField(max_length=250, null=False, blank=False)
     phone_number = models.CharField(max_length=25, null=False, blank=False)
@@ -60,7 +57,6 @@ class LeadWebsite(models.Model):
         return 'Lead Website' + self.full_name + ' ' + str(self.created_time)
 
 class LeadMSN(models.Model):
-    #created_time = models.DateTimeField(auto_now_add=True)
     created_time = models.CharField(max_length=250)
     full_name = models.CharField(max_length=250, null=False, blank=False)
     phone_number = models.CharField(max_length=25, null=False, blank=False)

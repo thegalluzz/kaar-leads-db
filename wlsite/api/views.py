@@ -1,5 +1,3 @@
-from lib2to3.pgen2 import token
-from urllib.request import HTTPPasswordMgrWithDefaultRealm
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, response
 from django.shortcuts import get_object_or_404
@@ -13,6 +11,8 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import authentication_classes, permission_classes
+
 
 from django.conf import settings
 
@@ -84,6 +84,8 @@ class LeadAdsAPI(APIView):
 
 #Facebook Webhook
 @csrf_exempt
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def WebhookAds(request):
 
     if request.method == 'GET':
@@ -134,6 +136,8 @@ def WebhookAds(request):
 
 #Website Webhook
 @csrf_exempt
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def WebhookWebsite(request):
 
     if request.method == 'GET':
@@ -175,6 +179,8 @@ def WebhookWebsite(request):
         return Response(status.HTTP_400_BAD_REQUEST)
 
 @csrf_exempt
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def WebhookMSN(request):
 
     if request.method == 'GET':
